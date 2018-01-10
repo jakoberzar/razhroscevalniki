@@ -51,12 +51,14 @@ Vključuje lahko tudi t.i. *instruction set simulator* (ISS), torej simulator iz
 |-----------------------------------|------------------------|
 | - višjenivojski programski jeziki | - strojna koda         |
 | - potrebno mapiranje              | - bolj enostavno, 1:1  |
+
 Z večjo uporabo višjenivojskih programskih jezikov je narasla potreba po debuggerjih, kjer je potrebno preslikovanje iz disassemblyja nazaj v izvorno kodo, kjer pa nastane težava - vsak ukaz v strojnem jeziku nima nujno enakega v izvornem jeziku. Zato je potrebno pri prevajanju dodati podatke o izvorni kodi, ki debuggerju pomagajo pri mapiranju kode nazaj.
 
 | Stand-alone debugger  | IDE (integrirano razvojno okolje) |
 |-----------------------|------------------------|
 | - program, ki je namenjen samo razhroščevanju | - vključuje tudi prevajalnik, povezovalnik, itd. |
 | - več prostosti pri uporabi drugih orodij | - boljša povezava z prevajalnikom, bolj priročni |
+
 Razhroščevalniki so te dni pogosto vključeni v integrirano razvojno okolje, kar je veliko bolj priročno od uporabe posebnega programa za razhroščevanje.
 
 ## Funkcionalnosti ##
