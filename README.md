@@ -8,3 +8,7 @@ Dokument je na voljo v datotekah
 - [Markdown](debuggers.md)
 - [PDF](debuggers.pdf)
 - [HTML](https://jakoberzar.github.io/razhroscevalniki/debuggers.html)
+
+Predstavitev:
+- [PPTX](debuggers.pptx)
+- [PDF](debuggers_presentation.pdf)

@@ -8,7 +8,7 @@ Kazalo
 - [Razhroščevalniki](#razhro%C5%A1%C4%8Devalniki)
 - [Pregled razhroščevalnikov](#pregled-razhro%C5%A1%C4%8Devalnikov)
     - [Opis](#opis)
-        - [Tipi razhroščevalnikov](#tipi-razhro%C5%A1%C4%8Devalnikov)
+    - [Tipi razhroščevalnikov](#tipi-razhro%C5%A1%C4%8Devalnikov)
     - [Funkcionalnosti](#funkcionalnosti)
         - [Vzvratno razhroščevanje (reverse debugging)](#vzvratno-razhro%C5%A1%C4%8Devanje-reverse-debugging)
     - [Debugger front-ends](#debugger-front-ends)
@@ -25,7 +25,7 @@ Kazalo
         - [Nastavljanje prekinitvene točke](#nastavljanje-prekinitvene-to%C4%8Dke)
         - [Pasti (traps)](#pasti-traps)
         - [Izvedba prekinitvene točke](#izvedba-prekinitvene-to%C4%8Dke)
-        - [Komentiran primer nastavljanja in izvajanja prekinitvene točke z ptrace](#komentiran-primer-nastavljanja-in-izvajanja-prekinitvene-to%C4%8Dke-z-ptrace)
+        - [Primer nastavljanja in izvajanja prekinitvene točke z ptrace](#primer-nastavljanja-in-izvajanja-prekinitvene-to%C4%8Dke-z-ptrace)
         - [Pogojne prekinitvene točke (conditional breakpoints)](#pogojne-prekinitvene-to%C4%8Dke-conditional-breakpoints)
         - [Programske prekinitvene točke (software breakpoints)](#programske-prekinitvene-to%C4%8Dke-software-breakpoints)
         - [Razhroščevalska strojna oprema (debug hardware)](#razhro%C5%A1%C4%8Devalska-strojna-oprema-debug-hardware)
@@ -33,9 +33,9 @@ Kazalo
             - [Spominske prekinitvene točke (memory breakpoints, watchpoints)](#spominske-prekinitvene-to%C4%8Dke-memory-breakpoints-watchpoints)
             - [JTAG Debugger](#jtag-debugger)
             - [Razhroščevanje z ustavljanjem procesorja (halting mode debugging)](#razhro%C5%A1%C4%8Devanje-z-ustavljanjem-procesorja-halting-mode-debugging)
-        - [Informacije za razhroščevanje (debug information)](#informacije-za-razhro%C5%A1%C4%8Devanje-debug-information)
-            - [DWARF](#dwarf)
-        - [Klicni sklad (call stack)](#klicni-sklad-call-stack)
+    - [Informacije za razhroščevanje (debug information)](#informacije-za-razhro%C5%A1%C4%8Devanje-debug-information)
+        - [DWARF](#dwarf)
+    - [Klicni sklad (call stack)](#klicni-sklad-call-stack)
 - [Povzetek](#povzetek)
 - [Reference](#reference)
 ----------
@@ -44,9 +44,7 @@ Kazalo
 **Razhroščevalnik je program, s katerim testiramo ali razhroščujemo drug ("ciljni") program**. Njihov cilj je, da programerju pomagajo razumeti program in najti vzrok napake v programu.  Omogočajo spremljanje poteka izvajanja ciljnega programa in programerju omogočajo, da ob katerikoli točki ustavi program ter pogleda stanje programa in preveri pravilnost njegovega delovanja.
 Vključuje lahko tudi t.i. *instruction set simulator* (ISS), torej simulator izvajanja ukazov na ciljni arhitekturi, kot npr. SIC simulator, ki smo ga delali na vajah. V tem primeru je izvajanje tipično počasnejše kot neposredno izvajanje, a lahko omogoča še več funkcionalnosti. Zaradi hitrosti izvajanja lahko razhroščevalniki ponujajo več načinov izvajanja - polno ali delno simulacijo.
 
-
-
-### Tipi razhroščevalnikov ###
+## Tipi razhroščevalnikov ##
 | Source-level (symbolic) debugger  | Machine-level debugger |
 |-----------------------------------|------------------------|
 | - višjenivojski programski jeziki | - strojna koda         |
@@ -67,7 +65,6 @@ Razhroščevalniki so te dni pogosto vključeni v integrirano razvojno okolje, k
 - **pregled trenutnih vrednosti** v registrih in spominu
 - spreminjanje trenutnega stanja med tekom
 - nadaljevanje izvajanja programa na drugi lokaciji
-- analiza hitrosti izvajanja
 - prekinitvene točke pri dostopih do pomnilnika
 ### Vzvratno razhroščevanje (reverse debugging) ###
 Nekateri razhroščevalniki omogočajo vzvratno razhroščevanje, kar omogoča sprehod po izvajanju programa nazaj v času. Taki razhroščevalniki močno upočasnijo izvajanje programa, najboljši upočasnijo le za 2x ali manj. Ponekod lahko pride tak tip razhroščevanja zelo dobro v poštev, vendar še vedno ni v pogosti rabi.
@@ -169,7 +166,7 @@ Po tem, ko smo prekinitveno točko nastavili in na tisto mesto postavili past, l
 3. Poda nadzor uporabniku, in ta lahko vidi vrednosti spremenljivk, klicni sklad, itd.
 4. Če uporabnik ne odstrani prekinitvene točke na tem mestu, razhroščevalnik na to mesto past spet doda. *(Ker mora najprej izvesti še ta ukaz, jo najprej doda na naslednji ukaz, se s tem pri naslednjem ukazu ustavi, in jo zdaj nastavi na pravi ukaz, naslednjega pa spet nadomesti s provtno kodo in izvede).*
 
-### Komentiran primer nastavljanja in izvajanja prekinitvene točke z ptrace ###
+### Primer nastavljanja in izvajanja prekinitvene točke z ptrace ###
 V datoteki [ptrace_setting_breakpoint_example.md](examples/ptrace_setting_breakpoint_example.md)
 
 ### Pogojne prekinitvene točke (conditional breakpoints) ###
@@ -200,16 +197,16 @@ Je eden izmed načinov, s katerim lahko razhroščejumo na vgrajenih sistemih. Z
 #### Razhroščevanje z ustavljanjem procesorja (halting mode debugging) ####
 Tak tip razhroščevanja ustavi normalno izvajanje programa in procesorsko uro, še vedno pa tečejo zunanje naprave (RTC, DMA, ...). Na voljo imamo tudi kanal, preko katerega lahko v cevovod vstavimo ukaze in jih izvedemo, dostopamo pa lahko tudi do nekaterih posebnih sistemskih registrov. Do spomina lahko dostopamo z load in store ukazi, ki bodo šli v čez MMU in predpomnilnik, tako da bo dostop do spremenljivk vrnil pravilne vrednosti. Razhroščevalnik mora zato pravilno nadzorovati cevovod, pomnilniške banke, predpomnilnik... Vezje nam lahko omogoča tudi neposreden dostop do pomnilniškega vodila, vendar bo v tem primeru dostop do spremenljivk vrnil napačne vrednosti.
 
-### Informacije za razhroščevanje (debug information) ###
+## Informacije za razhroščevanje (debug information) ##
 Če se želimo v poljubnem programskem jeziku ustaviti le na vrsticah, ki jih vidimo v izvorni kodi, ne pa za vsak ukaz v strojni kodi, mora razhroščevalnik vedeti, kako se vrstice v izvorni kodi mapirajo z izvorno kodo. Zato mu mora to prevajalnik nekako sporočiti. Eden izmed standardov za to je DWARF.
 
-#### DWARF ####
+### DWARF ###
 Ime DWARF je povezano z datoteko ELF, ki smo jo tudi omenili pri predmetu. V DWARF lahko najdemo opise simbolov (funkcij, spremenljivk...).
 Primer je podan v datoteki [dwarf_debug_info.md](examples/dwarf_debug_info.md)
 
 Kljub dodatnim informacijam pa ima razhroščevalnik lahko še vedno težave, če je izhod prevajalnika preveč optimiziran - npr, če zaradi optimizacije kakšna funkcija manjka, prevajalnik odstrani kakšno spremenljivko, c++ templates, pri katerih je več kot ena vrstica izvorne kode na en ukaz...
 
-### Klicni sklad (call stack) ###
+## Klicni sklad (call stack) ##
 Z uporabo frame pointerjev lahko ugotovimo, znotraj katerih funkcij poteka trenutni klic, in sestavimo ustrezen izpis. Pri ugotavljanju tega pa lahko pride do težav, če prevajalnik s skladom ne dela po standardnem načinu klicanja - calling conventionu ali pa zaradi optimizacije kakšno funkcijo kar odstrani (ker npr. vrne konstanto).
 
 # Povzetek #
