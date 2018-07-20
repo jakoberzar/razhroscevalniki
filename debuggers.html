@@ -1,39 +1,401 @@
 <!DOCTYPE html>
-    <html>
-    <head>
-        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-        <style>
-/*--------------------------------------------------------------------------------------------- * Copyright (c) Microsoft Corporation. All rights reserved. * Licensed under the MIT License. See License.txt in the project root for license information. *--------------------------------------------------------------------------------------------*/ body { font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback"; font-size: 14px; padding: 0 12px; line-height: 22px; word-wrap: break-word; } body.scrollBeyondLastLine { margin-bottom: calc(100vh - 22px); } body.showEditorSelection .code-line { position: relative; } body.showEditorSelection .code-active-line:before, body.showEditorSelection .code-line:hover:before { content: ""; display: block; position: absolute; top: 0; left: -12px; height: 100%; } body.showEditorSelection li.code-active-line:before, body.showEditorSelection li.code-line:hover:before { left: -30px; } .vscode-light.showEditorSelection .code-active-line:before { border-left: 3px solid rgba(0, 0, 0, 0.15); } .vscode-light.showEditorSelection .code-line:hover:before { border-left: 3px solid rgba(0, 0, 0, 0.40); } .vscode-dark.showEditorSelection .code-active-line:before { border-left: 3px solid rgba(255, 255, 255, 0.4); } .vscode-dark.showEditorSelection .code-line:hover:before { border-left: 3px solid rgba(255, 255, 255, 0.60); } .vscode-high-contrast.showEditorSelection .code-active-line:before { border-left: 3px solid rgba(255, 160, 0, 0.7); } .vscode-high-contrast.showEditorSelection .code-line:hover:before { border-left: 3px solid rgba(255, 160, 0, 1); } img { max-width: 100%; max-height: 100%; } a { color: #4080D0; text-decoration: none; } a:focus, input:focus, select:focus, textarea:focus { outline: 1px solid -webkit-focus-ring-color; outline-offset: -1px; } hr { border: 0; height: 2px; border-bottom: 2px solid; } h1 { padding-bottom: 0.3em; line-height: 1.2; border-bottom-width: 1px; border-bottom-style: solid; } h1, h2, h3 { font-weight: normal; } h1 code, h2 code, h3 code, h4 code, h5 code, h6 code { font-size: inherit; line-height: auto; } a:hover { color: #4080D0; text-decoration: underline; } table { border-collapse: collapse; } table > thead > tr > th { text-align: left; border-bottom: 1px solid; } table > thead > tr > th, table > thead > tr > td, table > tbody > tr > th, table > tbody > tr > td { padding: 5px 10px; } table > tbody > tr + tr > td { border-top: 1px solid; } blockquote { margin: 0 7px 0 5px; padding: 0 16px 0 10px; border-left: 5px solid; } code { font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback"; font-size: 14px; line-height: 19px; } body.wordWrap pre { white-space: pre-wrap; } .mac code { font-size: 12px; line-height: 18px; } code > div { padding: 16px; border-radius: 3px; overflow: auto; } /** Theming */ .vscode-light { color: rgb(30, 30, 30); } .vscode-dark { color: #DDD; } .vscode-high-contrast { color: white; } .vscode-light code { color: #A31515; } .vscode-dark code { color: #D7BA7D; } .vscode-light code > div { background-color: rgba(220, 220, 220, 0.4); } .vscode-dark code > div { background-color: rgba(10, 10, 10, 0.4); } .vscode-high-contrast code > div { background-color: rgb(0, 0, 0); } .vscode-high-contrast h1 { border-color: rgb(0, 0, 0); } .vscode-light table > thead > tr > th { border-color: rgba(0, 0, 0, 0.69); } .vscode-dark table > thead > tr > th { border-color: rgba(255, 255, 255, 0.69); } .vscode-light h1, .vscode-light hr, .vscode-light table > tbody > tr + tr > td { border-color: rgba(0, 0, 0, 0.18); } .vscode-dark h1, .vscode-dark hr, .vscode-dark table > tbody > tr + tr > td { border-color: rgba(255, 255, 255, 0.18); } .vscode-light blockquote, .vscode-dark blockquote { background: rgba(127, 127, 127, 0.1); border-color: rgba(0, 122, 204, 0.5); } .vscode-high-contrast blockquote { background: transparent; border-color: #fff; }
-</style>
+<html>
+<head>
+<title>debuggers.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
 <style>
-/* Tomorrow Theme */ /* http://jmblog.github.com/color-themes-for-google-code-highlightjs */ /* Original theme - https://github.com/chriskempson/tomorrow-theme */ /* Tomorrow Comment */ .hljs-comment, .hljs-quote { color: #8e908c; } /* Tomorrow Red */ .hljs-variable, .hljs-template-variable, .hljs-tag, .hljs-name, .hljs-selector-id, .hljs-selector-class, .hljs-regexp, .hljs-deletion { color: #c82829; } /* Tomorrow Orange */ .hljs-number, .hljs-built_in, .hljs-builtin-name, .hljs-literal, .hljs-type, .hljs-params, .hljs-meta, .hljs-link { color: #f5871f; } /* Tomorrow Yellow */ .hljs-attribute { color: #eab700; } /* Tomorrow Green */ .hljs-string, .hljs-symbol, .hljs-bullet, .hljs-addition { color: #718c00; } /* Tomorrow Blue */ .hljs-title, .hljs-section { color: #4271ae; } /* Tomorrow Purple */ .hljs-keyword, .hljs-selector-tag { color: #8959a8; } .hljs { display: block; overflow-x: auto; color: #4d4d4c; padding: 0.5em; } .hljs-emphasis { font-style: italic; } .hljs-strong { font-weight: bold; }
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
 </style>
+
 <style>
-ul.contains-task-list { padding-left: 0; } ul ul.contains-task-list { padding-left: 40px; } .task-list-item { list-style-type: none; } .task-list-item-checkbox { vertical-align: middle; }
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
 </style>
-        <style>
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'HelveticaNeue-Light', 'Ubuntu', 'Droid Sans', sans-serif;
-                font-size: 14px;
-                line-height: 1.6;
-            }
-        </style>
-    </head>
-    <body>
-        <h1 id="razhroscevalniki">Razhroščevalniki</h1>
-<p>Predstavitev razhroščevalnikov in njihovega delovanja v sistemu Linux za predmet Sistemska programska oprema na Fakulteti za računalništvo in informatiko.</p>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family:  "Meiryo", "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+</head>
+<body>
+<h1 id="razhro%C5%A1%C4%8Devalniki-debuggerji">Razhroščevalniki (Debuggerji)</h1>
+<p>Predstavitev razhroščevalnikov in njihovega delovanja v sistemu Linux za predmet Sistemska programska oprema na Fakulteti za računalništvo in informatiko. In HDH.</p>
 <p>Avtor: Jakob Erzar</p>
 <hr>
 <p>Kazalo</p>
 <ul>
-<li><a href="#razhro%C5%A1%C4%8Devalniki">Razhroščevalniki</a></li>
+<li><a href="#razhro%C5%A1%C4%8Devalniki-debuggerji">Razhroščevalniki (Debuggerji)</a></li>
 <li><a href="#pregled-razhro%C5%A1%C4%8Devalnikov">Pregled razhroščevalnikov</a>
 <ul>
-<li><a href="#opis">Opis</a>
-<ul>
+<li><a href="#opis">Opis</a></li>
 <li><a href="#tipi-razhro%C5%A1%C4%8Devalnikov">Tipi razhroščevalnikov</a></li>
-</ul>
-</li>
 <li><a href="#funkcionalnosti">Funkcionalnosti</a>
 <ul>
 <li><a href="#vzvratno-razhro%C5%A1%C4%8Devanje-reverse-debugging">Vzvratno razhroščevanje (reverse debugging)</a></li>
@@ -66,7 +428,7 @@ ul.contains-task-list { padding-left: 0; } ul ul.contains-task-list { padding-le
 <li><a href="#nastavljanje-prekinitvene-to%C4%8Dke">Nastavljanje prekinitvene točke</a></li>
 <li><a href="#pasti-traps">Pasti (traps)</a></li>
 <li><a href="#izvedba-prekinitvene-to%C4%8Dke">Izvedba prekinitvene točke</a></li>
-<li><a href="#komentiran-primer-nastavljanja-in-izvajanja-prekinitvene-to%C4%8Dke-z-ptrace">Komentiran primer nastavljanja in izvajanja prekinitvene točke z ptrace</a></li>
+<li><a href="#primer-nastavljanja-in-izvajanja-prekinitvene-to%C4%8Dke-s-ptrace">Primer nastavljanja in izvajanja prekinitvene točke s ptrace</a></li>
 <li><a href="#pogojne-prekinitvene-to%C4%8Dke-conditional-breakpoints">Pogojne prekinitvene točke (conditional breakpoints)</a></li>
 <li><a href="#programske-prekinitvene-to%C4%8Dke-software-breakpoints">Programske prekinitvene točke (software breakpoints)</a></li>
 <li><a href="#razhro%C5%A1%C4%8Devalska-strojna-oprema-debug-hardware">Razhroščevalska strojna oprema (debug hardware)</a>
@@ -77,6 +439,8 @@ ul.contains-task-list { padding-left: 0; } ul ul.contains-task-list { padding-le
 <li><a href="#razhro%C5%A1%C4%8Devanje-z-ustavljanjem-procesorja-halting-mode-debugging">Razhroščevanje z ustavljanjem procesorja (halting mode debugging)</a></li>
 </ul>
 </li>
+</ul>
+</li>
 <li><a href="#informacije-za-razhro%C5%A1%C4%8Devanje-debug-information">Informacije za razhroščevanje (debug information)</a>
 <ul>
 <li><a href="#dwarf">DWARF</a></li>
@@ -85,17 +449,15 @@ ul.contains-task-list { padding-left: 0; } ul ul.contains-task-list { padding-le
 <li><a href="#klicni-sklad-call-stack">Klicni sklad (call stack)</a></li>
 </ul>
 </li>
-</ul>
-</li>
 <li><a href="#povzetek">Povzetek</a></li>
 <li><a href="#reference">Reference</a></li>
 </ul>
 <hr>
-<h1 id="pregled-razhroscevalnikov">Pregled razhroščevalnikov</h1>
+<h1 id="pregled-razhro%C5%A1%C4%8Devalnikov">Pregled razhroščevalnikov</h1>
 <h2 id="opis">Opis</h2>
 <p><strong>Razhroščevalnik je program, s katerim testiramo ali razhroščujemo drug (&quot;ciljni&quot;) program</strong>. Njihov cilj je, da programerju pomagajo razumeti program in najti vzrok napake v programu.  Omogočajo spremljanje poteka izvajanja ciljnega programa in programerju omogočajo, da ob katerikoli točki ustavi program ter pogleda stanje programa in preveri pravilnost njegovega delovanja.
-Vključuje lahko tudi t.i. <em>instruction set simulator</em> (ISS), torej simulator izvajanja ukazov na ciljni arhitekturi, kot npr. SIC simulator, ki smo ga delali na vajah. V tem primeru je izvajanje tipično počasnejše kot neposredno izvajanje, a lahko omogoča še več funkcionalnosti. Zaradi hitrosti izvajanja lahko razhroščevalniki ponujajo več načinov izvajanja - polno ali delno simulacijo.</p>
-<h3 id="tipi-razhroscevalnikov">Tipi razhroščevalnikov</h3>
+Vključuje lahko tudi t.i. <em>instruction set simulator</em> (ISS), torej simulator izvajanja ukazov na ciljni arhitekturi, kot npr. različni emulatorji. V tem primeru je izvajanje tipično počasnejše kot neposredno izvajanje, a lahko omogoča še več funkcionalnosti. Zaradi hitrosti izvajanja lahko razhroščevalniki ponujajo več načinov izvajanja - polno ali delno simulacijo.</p>
+<h2 id="tipi-razhro%C5%A1%C4%8Devalnikov">Tipi razhroščevalnikov</h2>
 <table>
 <thead>
 <tr>
@@ -141,14 +503,13 @@ Vključuje lahko tudi t.i. <em>instruction set simulator</em> (ISS), torej simul
 <li><strong>pregled trenutnih vrednosti</strong> v registrih in spominu</li>
 <li>spreminjanje trenutnega stanja med tekom</li>
 <li>nadaljevanje izvajanja programa na drugi lokaciji</li>
-<li>analiza hitrosti izvajanja</li>
 <li>prekinitvene točke pri dostopih do pomnilnika</li>
 </ul>
-<h3 id="vzvratno-razhroscevanje-reverse-debugging">Vzvratno razhroščevanje (reverse debugging)</h3>
+<h3 id="vzvratno-razhro%C5%A1%C4%8Devanje-reverse-debugging">Vzvratno razhroščevanje (reverse debugging)</h3>
 <p>Nekateri razhroščevalniki omogočajo vzvratno razhroščevanje, kar omogoča sprehod po izvajanju programa nazaj v času. Taki razhroščevalniki močno upočasnijo izvajanje programa, najboljši upočasnijo le za 2x ali manj. Ponekod lahko pride tak tip razhroščevanja zelo dobro v poštev, vendar še vedno ni v pogosti rabi.</p>
 <h2 id="debugger-front-ends">Debugger front-ends</h2>
 <p>Nekateri razhroščevalniki nudijo le CLI, saj s tem povečajo prenosljivost in zmanjšajo uporabo virov, a je za večino programerjev GUI veliko bolj enostaven in hiter za uporabo. Zato obstajajo tudi programi, ki so le GUI vmesniki za specifične CLI debuggerje (npr <a href="https://github.com/cs01/gdbgui">GDBGUI</a> za <a href="https://en.wikipedia.org/wiki/GNU_Debugger">GDB</a>)</p>
-<h2 id="primeri-razhroscevalnikov">Primeri razhroščevalnikov</h2>
+<h2 id="primeri-razhro%C5%A1%C4%8Devalnikov">Primeri razhroščevalnikov</h2>
 <ul>
 <li>GDB - GNU debugger</li>
 <li>WinDbg</li>
@@ -161,8 +522,8 @@ Vključuje lahko tudi t.i. <em>instruction set simulator</em> (ISS), torej simul
 </ul>
 <h3 id="gnu-debugger-gdb">GNU Debugger (GDB)</h3>
 <p>Prenosljiv razhroščevalnik, ki teče na večih Unix-like sistemih in deluje z večimi programskimi jeziki, kot Ada, C, C++, Objective-C, D, Pascal, Fortran, Go, Rust,... na velikem številu različnih arhitektur - X86 in X64, IA-64, ARM, Alpha, AVR, H8/300, Motorola 68000, MIPS, PA-RISC, PowerPC, SuperH, SPARC,...</p>
-<p>Napisal ga je Richard Stallman v letu 1986 kot del njegovega GNU sistema, in je izdan pod GNU GPL licenco. Še vedno je v aktivnem razvoju (8.0 je izšla junija 2017), ki ga zdaj vodi GDB Steering Committee. Od verzije 7.0 (2009) podpira tudi vzvratno razhroščevanje.</p>
-<h4 id="oddaljeno-razhroscevanje">Oddaljeno razhroščevanje</h4>
+<p>Napisal ga je Richard Stallman v letu 1986 kot del njegovega GNU sistema, in je izdan pod GNU GPL licenco. Še vedno je v aktivnem razvoju (8.0 je izšla junija 2017), ki ga zdaj vodi GDB Steering Committee.</p>
+<h4 id="oddaljeno-razhro%C5%A1%C4%8Devanje">Oddaljeno razhroščevanje</h4>
 <p>GDB omogoča tudi oddaljeno razhroščevanje - GDB instanca na enem sistemu lahko preko TCP / IP ali serijske naprave komunicira z programom, ki razume GDB protokol. Tak program lahko ustvarimo z povezovanjem programa z določenimi GDB datotekami ali pa uporabimo gdbserver.</p>
 <p>Ker nima svojega GUI vmesnika, le CLI, obstaja zanj veliko GUI vmesnikov, ali pa programov, ki lahko z njim komunicira.</p>
 <h4 id="primeri-gdb-front-endov">Primeri GDB front-endov</h4>
@@ -176,9 +537,9 @@ Vključuje lahko tudi t.i. <em>instruction set simulator</em> (ISS), torej simul
 <li>CodeLite</li>
 <li>Visual Studio</li>
 </ul>
-<h1 id="delovanje-razhroscevalnikov">Delovanje razhroščevalnikov</h1>
+<h1 id="delovanje-razhro%C5%A1%C4%8Devalnikov">Delovanje razhroščevalnikov</h1>
 <h2 id="ptrace-linux">ptrace (Linux)</h2>
-<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">long</span> <span class="hljs-title">ptrace</span><span class="hljs-params">(<span class="hljs-keyword">enum</span> <span class="hljs-number">__</span>ptrace_request request, <span class="hljs-keyword">pid_t</span> pid, <span class="hljs-keyword">void</span> *addr, <span class="hljs-keyword">void</span> *data)</span></span>;
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">long</span> <span class="hljs-title">ptrace</span><span class="hljs-params">(<span class="hljs-keyword">enum</span> __ptrace_request request, <span class="hljs-keyword">pid_t</span> pid, <span class="hljs-keyword">void</span> *addr, <span class="hljs-keyword">void</span> *data)</span></span>;
 </div></code></pre>
 <blockquote>
 <p>The ptrace() system call provides a means by which one process (the ”tracer”) may observe and control the execution of another process (the ”tracee”), and examine and change the tracee’s memory and registers. It is primarily used to implement breakpoint debugging and system call tracing. - <code>man 2 ptrace</code></p>
@@ -200,7 +561,8 @@ modify the tracee.  The tracer then causes the tracee to continue,
 optionally ignoring the delivered signal (or even delivering a
 different signal instead).</p>
 </blockquote>
-<h3 id="primer-uporabe-ptrace-traceme">Primer uporabe PTRACE_TRACEME</h3>
+<p><a href="https://wiki.ubuntu.com/SecurityTeam/Roadmap/KernelHardening#ptrace_Protection">Varnost - Yama</a></p>
+<h3 id="primer-uporabe-ptracetraceme">Primer uporabe PTRACE_TRACEME</h3>
 <p>Zaradi dolžine primera sem ga premaknil v datoteko <a href="examples/ptrace_traceme_example.c">ptrace_traceme_example.c</a></p>
 <h3 id="primeri-ukazov-gdb-in-ptrace">Primeri ukazov <code>gdb</code> in <code>ptrace</code></h3>
 <table>
@@ -244,8 +606,8 @@ different signal instead).</p>
 </tr>
 </tbody>
 </table>
-<h2 id="prekinitvene-tocke-breakpoints">Prekinitvene točke (breakpoints)</h2>
-<h3 id="nastavljanje-prekinitvene-tocke">Nastavljanje prekinitvene točke</h3>
+<h2 id="prekinitvene-to%C4%8Dke-breakpoints">Prekinitvene točke (breakpoints)</h2>
+<h3 id="nastavljanje-prekinitvene-to%C4%8Dke">Nastavljanje prekinitvene točke</h3>
 <p>Ko razhroščevalniku naročimo, naj na izbrano vrstico v kodi doda ustavitveno točko, si <strong>razhroščevalnik ta ukaz shrani v spomin</strong>, nato pa <strong>na to mesto zapiše</strong>:</p>
 <ul>
 <li>poseben ukaz (na x86 je to <code>INT 3</code>)</li>
@@ -266,7 +628,7 @@ different signal instead).</p>
 <li>INT 0x80 - Unix načeloma ne uporablja programskih prekinitev, razen 0x80, ki ga uporablja za sistemske klice. Tudi v tem primeru v registre vpišemo parametre, nato pa izvedemo ta ukaz.</li>
 <li>INT 3 - Namenjen razhroščevalnikom za nastavljanje prekinitvene točke. Ta ukaz je poseben, ker se zapiše <strong>le z enim bajtom</strong> - Njegov opcode je <code>0xCC</code>, čeprav se načeloma INT X zapiše z dvema bajtoma, torej <code>0xCD 0x03</code>. Ker so nekateri ukazi na x86 lahko dolgi samo en bajt, s tem ob nastavitvi prekinitvene točke ne povozimo še drugih ukazov.</li>
 </ul>
-<h3 id="izvedba-prekinitvene-tocke">Izvedba prekinitvene točke</h3>
+<h3 id="izvedba-prekinitvene-to%C4%8Dke">Izvedba prekinitvene točke</h3>
 <p>Po tem, ko smo prekinitveno točko nastavili in na tisto mesto postavili past, lahko CPE poženemo in počakamo, da CPE pride do te točke. Ko bo CPE do tja prišel, se bo past sprožila, pognal se bo ustrezen podprogram v operacijskem sistemu in proces razhroščevalnika bo dobil signal, da se je ciljni program ustavil. Razhroščevalnik nato:</p>
 <ol>
 <li>Zamenja past (<code>INT 3</code>) z prvotnim ukazom na tistem mestu</li>
@@ -274,15 +636,15 @@ different signal instead).</p>
 <li>Poda nadzor uporabniku, in ta lahko vidi vrednosti spremenljivk, klicni sklad, itd.</li>
 <li>Če uporabnik ne odstrani prekinitvene točke na tem mestu, razhroščevalnik na to mesto past spet doda. <em>(Ker mora najprej izvesti še ta ukaz, jo najprej doda na naslednji ukaz, se s tem pri naslednjem ukazu ustavi, in jo zdaj nastavi na pravi ukaz, naslednjega pa spet nadomesti s provtno kodo in izvede).</em></li>
 </ol>
-<h3 id="komentiran-primer-nastavljanja-in-izvajanja-prekinitvene-tocke-z-ptrace">Komentiran primer nastavljanja in izvajanja prekinitvene točke z ptrace</h3>
+<h3 id="primer-nastavljanja-in-izvajanja-prekinitvene-to%C4%8Dke-s-ptrace">Primer nastavljanja in izvajanja prekinitvene točke s ptrace</h3>
 <p>V datoteki <a href="examples/ptrace_setting_breakpoint_example.md">ptrace_setting_breakpoint_example.md</a></p>
-<h3 id="pogojne-prekinitvene-tocke-conditional-breakpoints">Pogojne prekinitvene točke (conditional breakpoints)</h3>
+<h3 id="pogojne-prekinitvene-to%C4%8Dke-conditional-breakpoints">Pogojne prekinitvene točke (conditional breakpoints)</h3>
 <p>To so prekinitvene točke, ki se izvedejo le ob danem pogoju, npr. ko je indeks v zanki enak določeni vrednosti.
 Najbolj enostavno jih je implementirati tako, da razhroščevalnik uporablja navadne prekinitvene točke, nato pa preveri, če se pogoji ujemajo danim podatkom, in le v tem primeru poda nadzor uporabniku.
 Če uporabljamo oddaljen razhroščevalnik (npr. preko gdbserver) lahko prenos iz ciljne naprave na uporabnikovo napravo predstavlja veliko overheada, zato lahko pogoje preko gdb stuba preverimo kar na ciljni napravi, ali pa uporabimo interpreter, naložen kot deljen objekt.</p>
-<h3 id="programske-prekinitvene-tocke-software-breakpoints">Programske prekinitvene točke (software breakpoints)</h3>
+<h3 id="programske-prekinitvene-to%C4%8Dke-software-breakpoints">Programske prekinitvene točke (software breakpoints)</h3>
 <p>Ta tip prekinitvenih točk, ki sem ga opisal, imenujemo programske prekinitvene točke (software breakpoints). Pri programskih prekinitvenih točkah praktično ni omejitve v številu točk (razen spomina, seveda), potrebujemo pa spremembe programske kode programa, kar je lahko nevarno in počasno.</p>
-<h3 id="razhroscevalska-strojna-oprema-debug-hardware">Razhroščevalska strojna oprema (debug hardware)</h3>
+<h3 id="razhro%C5%A1%C4%8Devalska-strojna-oprema-debug-hardware">Razhroščevalska strojna oprema (debug hardware)</h3>
 <p>Procesor lahko vsebuje dodatno logiko, ki je namenjena zgolj razhroščevanju. To lahko vključuje npr.</p>
 <ul>
 <li>razhroščevanje z ustavljanjem procesorja (halting mode debugging)</li>
@@ -290,21 +652,21 @@ Najbolj enostavno jih je implementirati tako, da razhroščevalnik uporablja nav
 <li>strojna podpora za prekinitvene točke in watchpointe</li>
 </ul>
 <p>Taka strojna oprema je draga glede na prostor, ki je na voljo na siliciju - ker <em>boljše zmožnosti razhroščevanja</em> ni najlažje tržiti, se načrtovalcem procesorjem ne splača preveč prostora nameniti takim komponentam, saj bi bil ta prostor lahko namenjen še večjim številom enot za hitrejše procesiranje. Zato je taka strojna oprema ponavadi omejena in lahko nastavimo npr. 4 prekinitven točke.</p>
-<h4 id="strojne-prekinitvene-tocke">Strojne prekinitvene točke</h4>
+<h4 id="strojne-prekinitvene-to%C4%8Dke">Strojne prekinitvene točke</h4>
 <p>Komparator, ki gleda programski števec in ga primerja z programsko vneseno vrednostjo. Ponavadi genererira napako pri prenosu (fetch exception), in pošlje SIGSEGV ali SIGTRAP. Do njih lahko dostopamo le s posebnimi ukazi, ni tako enostavno kot pri programskih.</p>
-<h4 id="spominske-prekinitvene-tocke-memory-breakpoints-watchpoints">Spominske prekinitvene točke (memory breakpoints, watchpoints)</h4>
+<h4 id="spominske-prekinitvene-to%C4%8Dke-memory-breakpoints-watchpoints">Spominske prekinitvene točke (memory breakpoints, watchpoints)</h4>
 <p>To so točke, ki jih lahko nastavimo na določenem mestu v spominu, in se bo program ustavil ob dostopu do danega naslova. Izvedene so s komparatorjem, ki gleda na vodilo, na katerem je zapisan naslov v spominu. Lahko se sproži ob branju ali pisanju na spomin (ali oboje). Ponavadi generira data abort exception, in pošlje SIGSEGV ali SIGTRAP.</p>
 <h4 id="jtag-debugger">JTAG Debugger</h4>
 <p>Je eden izmed načinov, s katerim lahko razhroščejumo na vgrajenih sistemih. Za to poznamo več rešitev, ponavadi pa komunicirajo preko čim manjšega števila žic.</p>
-<h4 id="razhroscevanje-z-ustavljanjem-procesorja-halting-mode-debugging">Razhroščevanje z ustavljanjem procesorja (halting mode debugging)</h4>
+<h4 id="razhro%C5%A1%C4%8Devanje-z-ustavljanjem-procesorja-halting-mode-debugging">Razhroščevanje z ustavljanjem procesorja (halting mode debugging)</h4>
 <p>Tak tip razhroščevanja ustavi normalno izvajanje programa in procesorsko uro, še vedno pa tečejo zunanje naprave (RTC, DMA, ...). Na voljo imamo tudi kanal, preko katerega lahko v cevovod vstavimo ukaze in jih izvedemo, dostopamo pa lahko tudi do nekaterih posebnih sistemskih registrov. Do spomina lahko dostopamo z load in store ukazi, ki bodo šli v čez MMU in predpomnilnik, tako da bo dostop do spremenljivk vrnil pravilne vrednosti. Razhroščevalnik mora zato pravilno nadzorovati cevovod, pomnilniške banke, predpomnilnik... Vezje nam lahko omogoča tudi neposreden dostop do pomnilniškega vodila, vendar bo v tem primeru dostop do spremenljivk vrnil napačne vrednosti.</p>
-<h3 id="informacije-za-razhroscevanje-debug-information">Informacije za razhroščevanje (debug information)</h3>
+<h2 id="informacije-za-razhro%C5%A1%C4%8Devanje-debug-information">Informacije za razhroščevanje (debug information)</h2>
 <p>Če se želimo v poljubnem programskem jeziku ustaviti le na vrsticah, ki jih vidimo v izvorni kodi, ne pa za vsak ukaz v strojni kodi, mora razhroščevalnik vedeti, kako se vrstice v izvorni kodi mapirajo z izvorno kodo. Zato mu mora to prevajalnik nekako sporočiti. Eden izmed standardov za to je DWARF.</p>
-<h4 id="dwarf">DWARF</h4>
-<p>Ime DWARF je povezano z datoteko ELF, ki smo jo tudi omenili pri predmetu. V DWARF lahko najdemo opise simbolov (funkcij, spremenljivk...).
+<h3 id="dwarf">DWARF</h3>
+<p>Ime DWARF je povezano z datoteko ELF (Executable and Linkable Format), ki se uporablja za izvajanje in povezovanje. V DWARF lahko najdemo opise simbolov (funkcij, spremenljivk...).
 Primer je podan v datoteki <a href="examples/dwarf_debug_info.md">dwarf_debug_info.md</a></p>
 <p>Kljub dodatnim informacijam pa ima razhroščevalnik lahko še vedno težave, če je izhod prevajalnika preveč optimiziran - npr, če zaradi optimizacije kakšna funkcija manjka, prevajalnik odstrani kakšno spremenljivko, c++ templates, pri katerih je več kot ena vrstica izvorne kode na en ukaz...</p>
-<h3 id="klicni-sklad-call-stack">Klicni sklad (call stack)</h3>
+<h2 id="klicni-sklad-call-stack">Klicni sklad (call stack)</h2>
 <p>Z uporabo frame pointerjev lahko ugotovimo, znotraj katerih funkcij poteka trenutni klic, in sestavimo ustrezen izpis. Pri ugotavljanju tega pa lahko pride do težav, če prevajalnik s skladom ne dela po standardnem načinu klicanja - calling conventionu ali pa zaradi optimizacije kakšno funkcijo kar odstrani (ker npr. vrne konstanto).</p>
 <h1 id="povzetek">Povzetek</h1>
 <p>Razhroščevanje pride programerju zelo prav, vendar potrebuje tudi ustrezno podporo iz strani operacijskega sistema in strojne opreme. Razhroščevalnik lahko deluje veliko bolje, če mu prevajalnik poda ustrezne podatke. Težave lahko nastanejo tudi pri optimizacijah, ki precej otežijo delo.</p>
@@ -323,5 +685,5 @@ Primer je podan v datoteki <a href="examples/dwarf_debug_info.md">dwarf_debug_in
 <li><a href="https://blog.tartanllama.xyz/writing-a-linux-debugger-breakpoints/">Writing a linux debugger</a></li>
 </ul>
 
-    </body>
-    </html>
+</body>
+</html>
